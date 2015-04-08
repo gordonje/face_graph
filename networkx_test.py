@@ -12,41 +12,66 @@ print '''James' social graph contains {nodes} friends with {edges} connections.'
 								, edges = g.size()
 								)
 
-print "The density of the graph is {}.".format(nx.density(g))
+# print "The density of the graph is {}.".format(nx.density(g))
 
-print '   Finding cliques...'
+# print '   Finding cliques...'
 
-max_clique_len = nx.graph_clique_number(g)
+# max_clique_len = nx.graph_clique_number(g)
 
-print "The biggest clique contains {} friends.".format(max_clique_len)
+# print "The biggest clique contains {} friends.".format(max_clique_len)
 
-biggest_cliques = []
+# biggest_cliques = []
 
-for clique in nx.find_cliques_recursive(g):
+# for clique in nx.find_cliques_recursive(g):
 	
-	if len(clique) == max_clique_len:
+# 	if len(clique) == max_clique_len:
 
-		big_clique = []
+# 		big_clique = []
 
-		for i in clique:
+# 		for i in clique:
 
-			big_clique.append(g.node[i])
+# 			big_clique.append(g.node[i])
 
-		biggest_cliques.append(big_clique)
+# 		biggest_cliques.append(big_clique)
 
-print "There are {0} cliques with {1} friends".format( len(biggest_cliques), max_clique_len)
+# print "There are {0} cliques with {1} friends".format( len(biggest_cliques), max_clique_len)
 
-for clique in biggest_cliques:
-	print '    This one includes:'
+# for clique in biggest_cliques:
+# 	print '    This one includes:'
 
-	for node in clique:
-		print '        ' + node['label']
+# 	for node in clique:
+# 		print '        ' + node['label']
 
+print '    Calculating degree centrality for nodes...'
 
-# write json formatted data
+deg_cent = nx.betweenness_centrality(g)
+
+for key, value in deg_cent.iteritems():
+	g.node[key]['deg_cent'] = value
+
+print '    Calculating betweeness centrality for nodes...'
+
+bw_cent = nx.betweenness_centrality(g)
+
+for key, value in bw_cent.iteritems():
+	g.node[key]['bw_cent'] = value
+
+print '    Calculating eigenvector centrality for nodes...'
+
+ev_cent = nx.eigenvector_centrality(g)
+
+for key, value in ev_cent.iteritems():
+	g.node[key]['ev_cent'] = value
+
+for i in g.nodes(data=True):
+	if i[1]['deg_cent'] != i[1]['bw_cent']:
+		print i
+
+print '    Writing .json file...'
+
 d = json_graph.node_link_data(g) # node-link format to serialize
-# write json
-json.dump(d, open('force/force.json','w'))
+
+json.dump(d, open('viz/data/force.json','w'))
 
 
 # nx.draw_networkx(g, with_labels = True)
@@ -96,4 +121,6 @@ json.dump(d, open('force/force.json','w'))
 #  'eigenvector',
 #  'eigenvector_centrality',
 #  'eigenvector_centrality_numpy',
+
+print 'fin'
 
