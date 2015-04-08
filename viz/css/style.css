@@ -1,0 +1,17 @@
+
+circle.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  shape-rendering: crispEdges;
+}
+
+line.link {
+  stroke: #999;
+  stroke-opacity: .6;
+  shape-rendering: crispEdges;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
