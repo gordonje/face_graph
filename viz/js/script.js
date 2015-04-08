@@ -2,7 +2,9 @@ var margin = {top: 20, right: 20, bottom: 60, left: 50},
     width = 1000 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
-var color = d3.scale.category20();
+// var nodeScale = d3.scale.log()
+
+var color = d3.scale.category10();
 
 var force = d3.layout.force()
     .charge(-120)
@@ -38,9 +40,10 @@ d3.json("data/force.json", function(error, graph) {
       .data(graph.nodes)
     .enter().append("circle")
       .attr("class", "node")
+      // .attr("r", function(d) { return d.ev_cent * 1000;})
       .attr("r", 5)
       // .attr("transform", function(d) { return "translate(" + d + ")"; })
-      // .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { return color(d.sex); })
       .call(force.drag);
 
   node.append("title")
